@@ -69,4 +69,24 @@ class Client:
             logging.error(f"Request failed: {e}") 
             raise
 
+
+
+    def create_or_update_resource_definition(self, resource_definition: dict) -> requests.Response:
+        """
+        Creates or updates a resource definition on the Conveyor CI API Server.
+        
+        :param resource_definition: The resource definition, which defines the schema of a resource based on the OpenAPI Specification.
+            It determines how the resource will be defined, what properties it will have
+        :return: The response from the Conveyor API Server.
+        """
+    
+        url = f"{self.get_api_url()}/resource-definitions/apply/"
+        try:
+            response = requests.post(url, json=resource_definition)
+            response.raise_for_status()
+            return response
+        except RequestException as e:
+            logging.error(f"Request failed: {e}") 
+            raise
+
         

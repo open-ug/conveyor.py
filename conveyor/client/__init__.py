@@ -7,6 +7,7 @@ API Host and Port.
 """
 
 import requests
+import logging
 from requests.exceptions import RequestException
 
 class Client:
@@ -27,6 +28,28 @@ class Client:
         Returns the full API URL for the Conveyor CI API Server.
         """
         return f"http://{self.api_host}:{self.api_port}"
+
+
+
+
+    def create_resource_definition(self, resource_definition: dict) -> requests.Response:
+        """
+        Creates a resource definition on the Conveyor CI API Server.
+
+        :param resource: The resource definition, which defines the schema of a resource based on the OpenAPI Specification.
+            It determines how the resource will be defined, what properties it will have, and the validation schema for the resource.
+        :return: The response from the Conveyor API Server.
+        """
+    
+        url = f"{self.get_api_url()}/resource-definitions/"
+        try:
+            response = requests.post(url, json=resource_definition)
+            response.raise_for_status()
+            return response
+        except RequestException as e:
+            logging.error(f"Request failed: {e}") 
+            raise
+
     
 
     def create_resource(self, resource: dict) -> requests.Response:
@@ -43,7 +66,7 @@ class Client:
             response.raise_for_status()
             return response
         except RequestException as e:
-            print(f"Request failed: {e}")  
+            logging.error(f"Request failed: {e}") 
             raise
 
         

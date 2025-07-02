@@ -1,8 +1,7 @@
 import httpx
-from httpx import HTTPError, RequestError
+from httpx import HTTPStatusError, RequestError
 import time
 import logging
-from requests.exceptions import RequestException, HTTPError
 import json
 from nats.aio.client import Client as NATS
 
@@ -46,7 +45,7 @@ class LokiClient:
                 labels
             )
 
-        except HTTPError as e:
+        except HTTPStatusError as e:
             status_code = getattr(e.response, "status_code", "N/A")
             reason = getattr(e.response, "reason_phrase", "N/A")
             text = getattr(e.response, "text", "N/A")
